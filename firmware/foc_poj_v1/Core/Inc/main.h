@@ -63,6 +63,9 @@ void Error_Handler(void);
 #define DRV_EN_GPIO_Port GPIOB
 #define nFAULT_Pin GPIO_PIN_7
 #define nFAULT_GPIO_Port GPIOC
+#define nFAULT_EXTI_IRQn EXTI9_5_IRQn
+#define SPI3_CS_Pin GPIO_PIN_15
+#define SPI3_CS_GPIO_Port GPIOA
 #define SPI1_CS_Pin GPIO_PIN_2
 #define SPI1_CS_GPIO_Port GPIOD
 /* USER CODE BEGIN Private defines */
