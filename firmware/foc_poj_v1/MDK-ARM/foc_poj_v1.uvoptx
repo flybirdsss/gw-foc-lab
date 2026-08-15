@@ -119,6 +119,11 @@
       <TargetDriverDllRegistry>
         <SetRegEntry>
           <Number>0</Number>
+          <Key>UL2CM3</Key>
+          <Name>UL2CM3(-S0 -C0 -P0 -FD20000000 -FC8000 -FN1 -FF0STM32G47x-8x_128 -FS08000000 -FL020000 -FP0($$Device:STM32G474RBTx$CMSIS\Flash\STM32G47x-8x_128.FLM))</Name>
+        </SetRegEntry>
+        <SetRegEntry>
+          <Number>0</Number>
           <Key>ST-LINKIII-KEIL_SWO</Key>
           <Name>-U-O142 -O2254 -S0 -C0 -TO18 -TC10000000 -TP21 -TDS8007 -TDT0 -TDC1F -TIEFFFFFFFF -TIP8 -FO7 -FD20000000 -FC1000 -FN1 -FF0STM32G47x-8x_128.FLM -FS08000000 -FL020000 -FP0($$Device:STM32G474RBTx$CMSIS\Flash\STM32G47x-8x_128.FLM)</Name>
         </SetRegEntry>
@@ -871,6 +876,26 @@
       <bDave2>0</bDave2>
       <PathWithFileName>../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F/port.c</PathWithFileName>
       <FilenameWithoutPath>port.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+  </Group>
+
+  <Group>
+    <GroupName>Application/User</GroupName>
+    <tvExp>0</tvExp>
+    <tvExpOptDlg>0</tvExpOptDlg>
+    <cbSel>0</cbSel>
+    <RteFlg>0</RteFlg>
+    <File>
+      <GroupNumber>6</GroupNumber>
+      <FileNumber>56</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\User\Src\test.c</PathWithFileName>
+      <FilenameWithoutPath>test.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
