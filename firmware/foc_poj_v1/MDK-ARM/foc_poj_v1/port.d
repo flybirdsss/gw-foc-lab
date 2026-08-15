@@ -1,0 +1,12 @@
+foc_poj_v1\port.o: ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F/port.c
+foc_poj_v1\port.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h
+foc_poj_v1\port.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h
+foc_poj_v1\port.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
+foc_poj_v1\port.o: ../Core/Inc/FreeRTOSConfig.h
+foc_poj_v1\port.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/projdefs.h
+foc_poj_v1\port.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/portable.h
+foc_poj_v1\port.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/deprecated_definitions.h
+foc_poj_v1\port.o: ../Middlewares/Third_Party/FreeRTOS/Source/portable/RVDS/ARM_CM4F/portmacro.h
+foc_poj_v1\port.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/mpu_wrappers.h
+foc_poj_v1\port.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/task.h
+foc_poj_v1\port.o: ../Middlewares/Third_Party/FreeRTOS/Source/include/list.h
