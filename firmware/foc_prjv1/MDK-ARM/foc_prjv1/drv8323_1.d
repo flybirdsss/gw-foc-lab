@@ -1,5 +1,5 @@
 foc_prjv1\drv8323_1.o: ..\APP\Src\drv8323.c
-foc_prjv1\drv8323_1.o: ..\APP\Inc\drv8323.h
+foc_prjv1\drv8323_1.o: ../APP/Inc/drv8323.h
 foc_prjv1\drv8323_1.o: ../Core/Inc/main.h
 foc_prjv1\drv8323_1.o: ../Drivers/STM32G4xx_HAL_Driver/Inc/stm32g4xx_hal.h
 foc_prjv1\drv8323_1.o: ../Core/Inc/stm32g4xx_hal_conf.h

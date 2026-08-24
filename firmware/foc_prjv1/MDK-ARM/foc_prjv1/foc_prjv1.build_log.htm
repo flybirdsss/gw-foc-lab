@@ -22,15 +22,23 @@ Dialog DLL:      TCM.DLL V1.36.5.0
  
 <h2>Project:</h2>
 G:\Master_career\Master_For_mysel\my_github_project\project_1\gw-foc-lab\firmware\foc_prjv1\MDK-ARM\foc_prjv1.uvprojx
-Project File Date:  08/19/2026
+Project File Date:  08/20/2026
 
 <h2>Output:</h2>
 *** Using Compiler 'V5.06 update 6 (build 750)', folder: 'D:\Keil_v5\ARM\ARMCC\Bin'
 Build target 'foc_prjv1'
+compiling main.c...
+../APP/Inc/drv8323.h(61): warning:  #1-D: last line of file ends without a newline
+  #endif
+../Core/Src/main.c(164): warning:  #223-D: function "MX_USB_PCD_Init" declared implicitly
+    MX_USB_PCD_Init();
+../Core/Src/main.c(74): warning:  #177-D: function "Fix_Boot_OptionBytes"  was declared but never referenced
+  static void Fix_Boot_OptionBytes(void)
+../Core/Src/main.c: 3 warnings, 0 errors
 linking...
-Program Size: Code=22388 RO-data=616 RW-data=152 ZI-data=9728  
+Program Size: Code=23692 RO-data=616 RW-data=156 ZI-data=9732  
 FromELF: creating hex file...
-"foc_prjv1\foc_prjv1.axf" - 0 Error(s), 0 Warning(s).
+"foc_prjv1\foc_prjv1.axf" - 0 Error(s), 3 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -52,7 +60,7 @@ Package Vendor: Keil
 <h2>Collection of Component Files used:</h2>
 
    * Component: ARM::CMSIS:CORE:5.3.0
-Build Time Elapsed:  00:00:00
+Build Time Elapsed:  00:00:03
 </pre>
 </body>
 </html>

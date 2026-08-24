@@ -30,7 +30,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "drv8323.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -50,7 +50,16 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
+HAL_StatusTypeDef write_status;
 
+uint16_t test_read;
+
+uint16_t drv_tx_debug;
+
+uint16_t test_read1;
+uint16_t test_read2;
+
+uint8_t fault_state;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -157,6 +166,26 @@ int main(void)
   MX_COMP2_Init();
   MX_COMP3_Init();
   /* USER CODE BEGIN 2 */
+HAL_GPIO_WritePin(DRV_EN_GPIO_Port,
+                  DRV_EN_Pin,
+                  GPIO_PIN_SET);
+
+HAL_GPIO_WritePin(CAL_GPIO_Port,
+                  CAL_Pin,
+                  GPIO_PIN_RESET);
+
+HAL_Delay(10);
+
+
+DRV8323_ReadReg(DRV8323_REG_FAULT1,
+                &test_read1);
+
+HAL_Delay(1);
+
+DRV8323_ReadReg(DRV8323_REG_FAULT1,
+                &test_read2);
+
+		HAL_Delay(1);
 
   /* USER CODE END 2 */
 
@@ -200,7 +229,7 @@ void SystemClock_Config(void)
   RCC_OscInitStruct.HSI48State = RCC_HSI48_ON;
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
   RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
-  RCC_OscInitStruct.PLL.PLLM = RCC_PLLM_DIV2;
+  RCC_OscInitStruct.PLL.PLLM = RCC_PLLM_DIV6;
   RCC_OscInitStruct.PLL.PLLN = 85;
   RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV2;
   RCC_OscInitStruct.PLL.PLLQ = RCC_PLLQ_DIV6;

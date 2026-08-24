@@ -64,3 +64,4 @@ foc_prjv1\main.o: ../Core/Inc/spi.h
 foc_prjv1\main.o: ../Core/Inc/tim.h
 foc_prjv1\main.o: ../Core/Inc/usart.h
 foc_prjv1\main.o: ../Core/Inc/gpio.h
+foc_prjv1\main.o: ../APP/Inc/drv8323.h
