@@ -60,6 +60,17 @@ uint16_t test_read1;
 uint16_t test_read2;
 
 uint8_t fault_state;
+
+
+
+uint16_t test_read3;
+uint16_t test_read4;
+uint16_t test_read5;
+
+
+HAL_StatusTypeDef write_status;
+uint16_t write_readback;
+uint16_t restore_readback;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -160,34 +171,159 @@ int main(void)
   MX_USART1_UART_Init();
   MX_ADC2_Init();
   MX_ADC1_Init();
-  MX_FDCAN1_Init();
-  MX_USB_PCD_Init();
+//  MX_FDCAN1_Init();
+//  MX_USB_PCD_Init();
   MX_COMP1_Init();
   MX_COMP2_Init();
   MX_COMP3_Init();
-  /* USER CODE BEGIN 2 */
-HAL_GPIO_WritePin(DRV_EN_GPIO_Port,
-                  DRV_EN_Pin,
+	GPIO_InitTypeDef GPIO_InitStruct = {0};
+
+GPIO_InitStruct.Pin = GPIO_PIN_4;
+GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+GPIO_InitStruct.Pull = GPIO_PULLUP;
+GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+GPIO_InitStruct.Alternate = GPIO_AF5_SPI1;
+
+HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+/* USER CODE BEGIN 2 */
+
+/* SPI片选默认保持高电平 */
+HAL_GPIO_WritePin(SPI1_CS_GPIO_Port,
+                  SPI1_CS_Pin,
                   GPIO_PIN_SET);
 
+/* 关闭电流采样放大器校准 */
 HAL_GPIO_WritePin(CAL_GPIO_Port,
                   CAL_Pin,
                   GPIO_PIN_RESET);
 
-HAL_Delay(10);
+/* 使能DRV8323 */
+HAL_GPIO_WritePin(DRV_EN_GPIO_Port,
+                  DRV_EN_Pin,
+                  GPIO_PIN_SET);
+
+/* 等待DRV8323启动稳定 */
+HAL_Delay(20);
 
 
-DRV8323_ReadReg(DRV8323_REG_FAULT1,
-                &test_read1);
+/* ================= SPI读取测试 ================= */
+
+DRV8323_ReadReg(DRV8323_REG_CTRL, &test_read1);
+HAL_Delay(1);
+
+DRV8323_ReadReg(DRV8323_REG_GATE_HS, &test_read2);
+HAL_Delay(1);
+
+DRV8323_ReadReg(DRV8323_REG_GATE_LS, &test_read3);
+HAL_Delay(1);
+
+DRV8323_ReadReg(DRV8323_REG_OCP, &test_read4);
+HAL_Delay(1);
+
+DRV8323_ReadReg(DRV8323_REG_CSA, &test_read5);
+HAL_Delay(1);
+
+/* 只保留低11位 */
+test_read1 &= DRV8323_DATA_MASK;
+test_read2 &= DRV8323_DATA_MASK;
+test_read3 &= DRV8323_DATA_MASK;
+test_read4 &= DRV8323_DATA_MASK;
+test_read5 &= DRV8323_DATA_MASK;
+
+
+__NOP();    // 在这里打断点
+/* ========== SPI写入/读回测试 ========== */
+
+/* 1. 临时把 GATE_HS 从 0x3FF 改成 0x3FE */
+write_status = DRV8323_WriteReg(DRV8323_REG_GATE_HS,
+                                0x3FE);
 
 HAL_Delay(1);
 
-DRV8323_ReadReg(DRV8323_REG_FAULT1,
-                &test_read2);
+/* 2. 读回来 */
+DRV8323_ReadReg(DRV8323_REG_GATE_HS,
+                &write_readback);
 
-		HAL_Delay(1);
+write_readback &= DRV8323_DATA_MASK;
 
-  /* USER CODE END 2 */
+
+/* 3. 恢复原来的 0x3FF */
+DRV8323_WriteReg(DRV8323_REG_GATE_HS,
+                 0x3FF);
+
+HAL_Delay(1);
+
+/* 4. 再读一次确认恢复 */
+DRV8323_ReadReg(DRV8323_REG_GATE_HS,
+                &restore_readback);
+
+restore_readback &= DRV8323_DATA_MASK;
+
+__NOP();     /* 这里打断点 */
+/* =================================================
+ * 无电机：三相同相 PWM 短时间测试
+ * ================================================= */
+
+/* 先关闭DRV输出 */
+HAL_GPIO_WritePin(DRV_EN_GPIO_Port,
+                  DRV_EN_Pin,
+                  GPIO_PIN_RESET);
+
+/* 三相约50%占空比 */
+__HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, 2125);
+__HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_2, 2125);
+__HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_3, 2125);
+
+/* 启动三个主通道 */
+HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
+HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_2);
+HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_3);
+
+/* 启动三个互补通道 */
+HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_1);
+HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_2);
+HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_3);
+
+/* PWM已经稳定，再打开DRV */
+HAL_Delay(1);
+
+HAL_GPIO_WritePin(DRV_EN_GPIO_Port,
+                  DRV_EN_Pin,
+                  GPIO_PIN_SET);
+
+/* 实际驱动5ms */
+HAL_Delay(5);
+
+
+/* PWM仍在运行时读取故障 */
+DRV8323_ReadReg(DRV8323_REG_FAULT1, &test_read1);
+DRV8323_ReadReg(DRV8323_REG_FAULT2, &test_read2);
+
+test_read1 &= DRV8323_DATA_MASK;
+test_read2 &= DRV8323_DATA_MASK;
+
+
+/* 先关DRV功率输出 */
+HAL_GPIO_WritePin(DRV_EN_GPIO_Port,
+                  DRV_EN_Pin,
+                  GPIO_PIN_RESET);
+
+/* 再停止六路PWM */
+HAL_TIM_PWM_Stop(&htim1, TIM_CHANNEL_1);
+HAL_TIM_PWM_Stop(&htim1, TIM_CHANNEL_2);
+HAL_TIM_PWM_Stop(&htim1, TIM_CHANNEL_3);
+
+HAL_TIMEx_PWMN_Stop(&htim1, TIM_CHANNEL_1);
+HAL_TIMEx_PWMN_Stop(&htim1, TIM_CHANNEL_2);
+HAL_TIMEx_PWMN_Stop(&htim1, TIM_CHANNEL_3);
+
+__NOP();     /* 这里打断点 */
+
+while (1)
+{
+}
+/* USER CODE END 2 */
 
   /* Init scheduler */
   osKernelInitialize();  /* Call init function for freertos objects (in freertos.c) */

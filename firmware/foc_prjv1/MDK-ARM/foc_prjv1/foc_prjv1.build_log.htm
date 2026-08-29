@@ -30,13 +30,13 @@ Build target 'foc_prjv1'
 compiling main.c...
 ../APP/Inc/drv8323.h(61): warning:  #1-D: last line of file ends without a newline
   #endif
-../Core/Src/main.c(164): warning:  #223-D: function "MX_USB_PCD_Init" declared implicitly
-    MX_USB_PCD_Init();
-../Core/Src/main.c(74): warning:  #177-D: function "Fix_Boot_OptionBytes"  was declared but never referenced
+../Core/Src/main.c(329): warning:  #111-D: statement is unreachable
+    osKernelInitialize();  /* Call init function for freertos objects (in freertos.c) */
+../Core/Src/main.c(85): warning:  #177-D: function "Fix_Boot_OptionBytes"  was declared but never referenced
   static void Fix_Boot_OptionBytes(void)
 ../Core/Src/main.c: 3 warnings, 0 errors
 linking...
-Program Size: Code=23692 RO-data=616 RW-data=156 ZI-data=9732  
+Program Size: Code=17914 RO-data=570 RW-data=96 ZI-data=3760  
 FromELF: creating hex file...
 "foc_prjv1\foc_prjv1.axf" - 0 Error(s), 3 Warning(s).
 
